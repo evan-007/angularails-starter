@@ -6,7 +6,8 @@ var usemin = require('gulp-usemin');
 var uglify = require('gulp-uglify');
 var minifyCss = require('gulp-minify-css');
 var rev = require('gulp-rev');
-var onDemandServer = require('gulp-ondemand-server');
+var url = require('url')
+var proxy = require('proxy-middleware')
 
 gulp.task('connect', function(){
 	connect.server({
@@ -32,12 +33,4 @@ gulp.task('usemin', function() {
 		js: [uglify(), rev()]
 	}))
 	.pipe(gulp.dest('build/'));
-});
-
-gulp.task('default', function() {
-	var server = new onDemandServer();
-
-	server.registerHost('api/', 'http://localhost:3000');
-
-	server.start(9000);
 });
