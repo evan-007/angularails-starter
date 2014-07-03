@@ -7,6 +7,7 @@ var uglify = require('gulp-uglify');
 var minifyCss = require('gulp-minify-css');
 var rev = require('gulp-rev');
 var modRewrite = require('connect-modrewrite');
+var runSequence = require('run-sequence');
 
 
 //proxy all requests to /api to localhost:3000 for rails api
@@ -41,5 +42,15 @@ gulp.task('usemin', function() {
 		css: [minifyCss(), 'concat', rev()],
 		js: [uglify(), rev()]
 	}))
-	.pipe(gulp.dest('build/'));
+	.pipe(gulp.dest('../public/'));
+});
+
+gulp.task('copy-html-files', function() {
+  gulp.src(['./app/**/*.html', '!./app/index.html'], {base: './app'})
+    .pipe(gulp.dest('../public/'));
+});
+
+gulp.task('build', function() {
+  runSequence('clean',
+    ['copy-html-files', 'usemin']);
 });
