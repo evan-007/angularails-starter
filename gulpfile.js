@@ -6,12 +6,21 @@ var usemin = require('gulp-usemin');
 var uglify = require('gulp-uglify');
 var minifyCss = require('gulp-minify-css');
 var rev = require('gulp-rev');
-var url = require('url')
-var proxy = require('proxy-middleware')
+var modRewrite = require('connect-modrewrite');
 
+
+//proxy all requests to /api to localhost:3000 for rails api
 gulp.task('connect', function(){
 	connect.server({
-		root: './app'
+		root: './app',
+		port: 8000,
+		middleware: function() {
+			return [
+				modRewrite([
+					'^/api/(.*)$ http://localhost:3000/api/v1/$1 [P]'
+				])
+			];
+		}
 	});
 });
 
